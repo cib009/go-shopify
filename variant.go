@@ -19,6 +19,9 @@ type VariantService interface {
 	Create(int64, Variant) (*Variant, error)
 	Update(Variant) (*Variant, error)
 	Delete(int64, int64) error
+
+	// MetafieldsService used for Variant resource to communicate with Metafields resource
+	MetafieldsService
 }
 
 // VariantServiceOp handles communication with the variant related methods of
