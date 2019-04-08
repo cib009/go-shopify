@@ -37,6 +37,16 @@ type MetafieldServiceOp struct {
 	resourceID int64
 }
 
+// SubMetafieldServiceOp handles communication with the metafield
+// related methods of the Shopify API.
+type SubMetafieldServiceOp struct {
+	client        *Client
+	resource      string
+	resourceID    int64
+	subResource   string
+	subResourceId int64
+}
+
 // Metafield represents a Shopify metafield.
 type Metafield struct {
 	ID            int64       `json:"id,omitempty"`
@@ -69,6 +79,16 @@ func (s *MetafieldServiceOp) List(options interface{}) ([]Metafield, error) {
 	err := s.client.Get(path, resource, options)
 	return resource.Metafields, err
 }
+
+// List metafields
+func (s *SubMetafieldServiceOp) List(options interface{}) ([]Metafield, error) {
+	prefix := SubMetafieldPathPrefix(s.resource, s.resourceID, s.subResource, s.subResourceId)
+	path := fmt.Sprintf("%s.json", prefix)
+	resource := new(MetafieldsResource)
+	err := s.client.Get(path, resource, options)
+	return resource.Metafields, err
+}
+
 
 // Count metafields
 func (s *MetafieldServiceOp) Count(options interface{}) (int, error) {

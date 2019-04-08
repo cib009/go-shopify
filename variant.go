@@ -108,7 +108,38 @@ func (s *VariantServiceOp) Update(variant Variant) (*Variant, error) {
 	return resource.Variant, err
 }
 
-// Delete an existing product
-func (s *VariantServiceOp) Delete(productID int64, variantID int64) error {
-	return s.client.Delete(fmt.Sprintf("%s/%d/variants/%d.json", productsBasePath, productID, variantID))
+// List metafields for a product
+func (s *VariantServiceOp) ListMetafields(variantId int64, productId int64, options interface{}) ([]Metafield, error) {
+	metafieldService := &SubMetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+	return metafieldService.List(options)
+}
+
+// Count metafields for a product
+func (s *VariantServiceOp) CountMetafields(variantId int64, productId int64,  options interface{}) (int, error) {
+	metafieldService := &MetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+	return metafieldService.Count(options)
+}
+
+// Get individual metafield for a product
+func (s *VariantServiceOp) GetMetafield(variantId int64, productId int64, metafieldID int64, options interface{}) (*Metafield, error) {
+	metafieldService := &MetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+	return metafieldService.Get(metafieldID, options)
+}
+
+// Create a new metafield for a product
+func (s *VariantServiceOp) CreateMetafield(variantId int64, productId int64, metafield Metafield) (*Metafield, error) {
+	metafieldService := &MetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+	return metafieldService.Create(metafield)
+}
+
+// Update an existing metafield for a product
+func (s *VariantServiceOp) UpdateMetafield(variantId int64, productId int64, metafield Metafield) (*Metafield, error) {
+	metafieldService := &MetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+	return metafieldService.Update(metafield)
+}
+
+// // Delete an existing metafield for a product
+func (s *VariantServiceOp) DeleteMetafield(variantId int64, productId int64, metafieldID int64) error {
+	metafieldService := &MetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+	return metafieldService.Delete(metafieldID)
 }
