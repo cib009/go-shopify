@@ -8,6 +8,8 @@ import (
 )
 
 const variantsBasePath = "admin/variants"
+const parentVariantsBasePath = "admin/products"
+const childVariantsBasePath = "variants"
 
 // VariantService is an interface for interacting with the variant endpoints
 // of the Shopify API.
@@ -21,7 +23,7 @@ type VariantService interface {
 	Delete(int64, int64) error
 
 	// MetafieldsService used for Variant resource to communicate with Metafields resource
-	MetafieldsService
+	SubMetafieldsService
 }
 
 // VariantServiceOp handles communication with the variant related methods of
@@ -111,38 +113,43 @@ func (s *VariantServiceOp) Update(variant Variant) (*Variant, error) {
 	return resource.Variant, err
 }
 
-// List metafields for a product
+// Delete an existing Variant
+func (s *VariantServiceOp) Delete(productID int64, variantID int64) error {
+	return s.client.Delete(fmt.Sprintf("%s/%d/variants/%d.json", productsBasePath, productID, variantID))
+}
+
+// List metafields for a Variant
 func (s *VariantServiceOp) ListMetafields(variantId int64, productId int64, options interface{}) ([]Metafield, error) {
-	metafieldService := &SubMetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+	metafieldService := &SubMetafieldServiceOp{client: s.client, resource: parentVariantsBasePath, resourceID: productId, subResource: childVariantsBasePath, subResourceId:variantId}
 	return metafieldService.List(options)
 }
 
-// Count metafields for a product
+// Count metafields for a Variant
 func (s *VariantServiceOp) CountMetafields(variantId int64, productId int64,  options interface{}) (int, error) {
-	metafieldService := &MetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+	metafieldService := &SubMetafieldServiceOp{client: s.client, resource: parentVariantsBasePath, resourceID: productId, subResource: childVariantsBasePath, subResourceId:variantId}
 	return metafieldService.Count(options)
 }
 
-// Get individual metafield for a product
-func (s *VariantServiceOp) GetMetafield(variantId int64, productId int64, metafieldID int64, options interface{}) (*Metafield, error) {
-	metafieldService := &MetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+// Get individual metafield for a Variant
+func (s *VariantServiceOp) GetMetafields(variantId int64, productId int64, metafieldID int64, options interface{}) (*Metafield, error) {
+	metafieldService := &SubMetafieldServiceOp{client: s.client, resource: parentVariantsBasePath, resourceID: productId, subResource: childVariantsBasePath, subResourceId:variantId}
 	return metafieldService.Get(metafieldID, options)
 }
 
-// Create a new metafield for a product
-func (s *VariantServiceOp) CreateMetafield(variantId int64, productId int64, metafield Metafield) (*Metafield, error) {
-	metafieldService := &MetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+// Create a new metafield for a Variant
+func (s *VariantServiceOp) CreateMetafields(variantId int64, productId int64, metafield Metafield) (*Metafield, error) {
+	metafieldService := &SubMetafieldServiceOp{client: s.client, resource: parentVariantsBasePath, resourceID: productId, subResource: childVariantsBasePath, subResourceId:variantId}
 	return metafieldService.Create(metafield)
 }
 
-// Update an existing metafield for a product
-func (s *VariantServiceOp) UpdateMetafield(variantId int64, productId int64, metafield Metafield) (*Metafield, error) {
-	metafieldService := &MetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+// Update an existing metafield for a Variant
+func (s *VariantServiceOp) UpdateMetafields(variantId int64, productId int64, metafield Metafield) (*Metafield, error) {
+	metafieldService := &SubMetafieldServiceOp{client: s.client, resource: parentVariantsBasePath, resourceID: productId, subResource: childVariantsBasePath, subResourceId:variantId}
 	return metafieldService.Update(metafield)
 }
 
-// // Delete an existing metafield for a product
-func (s *VariantServiceOp) DeleteMetafield(variantId int64, productId int64, metafieldID int64) error {
-	metafieldService := &MetafieldServiceOp{client: s.client, resource: variantsBasePath, resourceID: variantId}
+// // Delete an existing metafield for a Variant
+func (s *VariantServiceOp) DeleteMetafields(variantId int64, productId int64, metafieldID int64) error {
+	metafieldService := &SubMetafieldServiceOp{client: s.client, resource: parentVariantsBasePath, resourceID: productId, subResource: childVariantsBasePath, subResourceId:variantId}
 	return metafieldService.Delete(metafieldID)
 }
