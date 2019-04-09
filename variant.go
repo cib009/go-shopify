@@ -8,7 +8,7 @@ import (
 )
 
 const variantsBasePath = "admin/variants"
-const parentVariantsBasePath = "admin/products"
+const parentVariantsBasePath = "products"
 const childVariantsBasePath = "variants"
 
 // VariantService is an interface for interacting with the variant endpoints
