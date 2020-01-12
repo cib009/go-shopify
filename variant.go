@@ -7,7 +7,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-const variantsBasePath = "admin/variants"
+const variantsBasePath = "admin/api/2020-01"
 const parentVariantsBasePath = "products"
 const childVariantsBasePath = "variants"
 
