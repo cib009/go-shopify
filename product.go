@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-const productsBasePath = "admin/api/2020-01/products"
+const productsBasePath = "admin/api/2019-04/products"
 const productsResourceName = "products"
 
 // ProductService is an interface for interfacing with the product endpoints
